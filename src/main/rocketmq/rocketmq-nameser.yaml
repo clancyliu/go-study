@@ -1,0 +1,95 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    k8s.kuboard.cn/displayName: rocketmq-namesrv(已验证)
+  labels:
+    k8s.kuboard.cn/layer: web
+    k8s.kuboard.cn/name: rocketmq-namesrv
+  name: rocketmq-namesrv
+  namespace: env
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      k8s.kuboard.cn/layer: web
+      k8s.kuboard.cn/name: rocketmq-namesrv
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        kubectl.kubernetes.io/restartedAt: '2023-04-07T17:24:10+08:00'
+      labels:
+        k8s.kuboard.cn/layer: web
+        k8s.kuboard.cn/name: rocketmq-namesrv
+    spec:
+      containers:
+        - command:
+            - sh
+            - mqnamesrv
+#          env:
+#            - name: JAVA_OPT_EXT
+#              value: '-Duser.home=/opt -Xms512M -Xmx512M -Xmn128m'
+          image: 'apache/rocketmq:4.9.4'
+          imagePullPolicy: IfNotPresent
+          name: rocketmq-namesrv
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+#          volumeMounts:
+#            - mountPath: /opt/logs
+#              name: volume-nnbbw
+#            - mountPath: /opt/store
+#              name: volume-2hkxh
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+#      volumes:
+#        - hostPath:
+#            path: /lnmp/docker/env/logs/rocketmq/namesrv
+#            type: ''
+#          name: volume-nnbbw
+#        - hostPath:
+#            path: /lnmp/docker/env/data/rocketmq/namesrv
+#            type: ''
+#          name: volume-2hkxh
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations: {}
+  labels:
+    k8s.kuboard.cn/layer: web
+    k8s.kuboard.cn/name: rocketmq-namesrv
+  name: rocketmq-namesrv
+  namespace: env
+spec:
+#  clusterIP: 10.233.22.17
+#  clusterIPs:
+#    - 10.233.22.17
+  externalTrafficPolicy: Cluster
+  internalTrafficPolicy: Cluster
+#  ipFamilies:
+#    - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+    - name: ifnc8k
+      nodePort: 30654
+      port: 9876
+      protocol: TCP
+      targetPort: 9876
+  selector:
+    k8s.kuboard.cn/layer: web
+    k8s.kuboard.cn/name: rocketmq-namesrv
+  sessionAffinity: None
+  type: NodePort

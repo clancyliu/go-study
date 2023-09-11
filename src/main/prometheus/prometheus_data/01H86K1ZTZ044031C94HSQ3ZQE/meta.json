@@ -1,0 +1,17 @@
+{
+	"ulid": "01H86K1ZTZ044031C94HSQ3ZQE",
+	"minTime": 1692419663646,
+	"maxTime": 1692424800000,
+	"stats": {
+		"numSamples": 31560,
+		"numSeries": 1315,
+		"numChunks": 1315
+	},
+	"compaction": {
+		"level": 1,
+		"sources": [
+			"01H86K1ZTZ044031C94HSQ3ZQE"
+		]
+	},
+	"version": 1
+}

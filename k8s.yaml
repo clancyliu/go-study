@@ -1,0 +1,77 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-webapp
+  namespace: webapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: my-webapp
+  template:
+    metadata:
+      labels:
+        app: my-webapp
+    spec:
+      containers:
+        - name: my-webapp
+          image: local/my-webapp:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 9080
+          env:
+            - name: ENVIRONMENT
+              value: production
+            - name: DB_HOST
+              value: my-db-service
+            - name: DB_PORT
+              value: "3306"
+#            - name: DB_USERNAME
+#              valueFrom:
+#                secretKeyRef:
+#                  name: my-db-credentials
+#                  key: username
+#            - name: DB_PASSWORD
+#              valueFrom:
+#                secretKeyRef:
+#                  name: my-db-credentials
+#                  key: password
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-webapp-service
+  namespace: webapp
+spec:
+  selector:
+    app: my-webapp
+  ports:
+    - name: http
+      port: 9080
+      targetPort: 9080
+  type: ClusterIP
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: my-webapp-ingress
+  namespace: webapp
+#  annotations:
+#    kubernetes.io/ingress.class: nginx
+#    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+    - host: my-webapp.example.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: my-webapp-service
+                port:
+                  name: http

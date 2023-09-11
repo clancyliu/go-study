@@ -1,0 +1,119 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    k8s.kuboard.cn/displayName: rocketmq-broker(已验证)
+    k8s.kuboard.cn/workload: rocketmq-broker
+  labels:
+    k8s.kuboard.cn/layer: web
+    k8s.kuboard.cn/name: rocketmq-broker
+  name: rocketmq-broker
+  namespace: env
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      k8s.kuboard.cn/layer: web
+      k8s.kuboard.cn/name: rocketmq-broker
+#  strategy:
+#    rollingUpdate:
+#      maxSurge: 25%
+#      maxUnavailable: 25%
+#    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        kubectl.kubernetes.io/restartedAt: '2023-04-07T20:21:08+08:00'
+      labels:
+        k8s.kuboard.cn/layer: web
+        k8s.kuboard.cn/name: rocketmq-broker
+    spec:
+      containers:
+        - command:
+            - sh
+            - mqbroker
+#            - '-n'
+#            - 'rocketmq-namesrv:9876'
+#            - '-c'
+#            - /etc/rocketmq/broker.conf
+          env:
+#            - name: JAVA_OPT_EXT
+#              value: '-Duser.home=/opt -Xms512M -Xmx512M -Xmn128m'
+            - name: NAMESRV_ADDR
+              value: 'rocketmq-namesrv:9876'
+          image: 'apache/rocketmq:4.9.4'
+          imagePullPolicy: IfNotPresent
+          name: rocketmq-broker
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+#          volumeMounts:
+#            - mountPath: /opt/logs
+#              name: volume-nnbbw
+#            - mountPath: /opt/store
+#              name: volume-sbs3h
+#            - mountPath: /etc/rocketmq/broker.conf
+#              name: volume-74ica
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+#      volumes:
+#        - hostPath:
+#            path: /lnmp/docker/env/logs/rocketmq/broker
+#            type: ''
+#          name: volume-nnbbw
+#        - hostPath:
+#            path: /lnmp/docker/env/data/rocketmq/broker
+#            type: ''
+#          name: volume-sbs3h
+#        - hostPath:
+#            path: /Users/clancy/MyCode/go-study/src/main/rocketmq/broker/broker.conf
+#            type: File
+#          name: volume-74ica
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    k8s.kuboard.cn/workload: rocketmq-broker
+  labels:
+    k8s.kuboard.cn/layer: web
+    k8s.kuboard.cn/name: rocketmq-broker
+  name: rocketmq-broker
+  namespace: env
+spec:
+#  clusterIP: 10.233.168.83
+#  clusterIPs:
+#    - 10.233.168.83
+  externalTrafficPolicy: Cluster
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+    - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+    - name: ifnc8k
+      nodePort: 31065
+      port: 10909
+      protocol: TCP
+      targetPort: 10909
+    - name: 3mefrb
+      nodePort: 32069
+      port: 10911
+      protocol: TCP
+      targetPort: 10911
+    - name: bsxddj
+      nodePort: 31692
+      port: 10912
+      protocol: TCP
+      targetPort: 10912
+  selector:
+    k8s.kuboard.cn/layer: web
+    k8s.kuboard.cn/name: rocketmq-broker
+  sessionAffinity: None
+  type: NodePort

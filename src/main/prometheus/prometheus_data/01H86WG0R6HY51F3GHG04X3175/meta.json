@@ -1,0 +1,17 @@
+{
+	"ulid": "01H86WG0R6HY51F3GHG04X3175",
+	"minTime": 1692434828922,
+	"maxTime": 1692439200000,
+	"stats": {
+		"numSamples": 15780,
+		"numSeries": 1315,
+		"numChunks": 1315
+	},
+	"compaction": {
+		"level": 1,
+		"sources": [
+			"01H86WG0R6HY51F3GHG04X3175"
+		]
+	},
+	"version": 1
+}

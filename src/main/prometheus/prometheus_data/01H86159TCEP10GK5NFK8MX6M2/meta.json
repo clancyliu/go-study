@@ -1,0 +1,17 @@
+{
+	"ulid": "01H86159TCEP10GK5NFK8MX6M2",
+	"minTime": 1692406453858,
+	"maxTime": 1692410400000,
+	"stats": {
+		"numSamples": 24093,
+		"numSeries": 1315,
+		"numChunks": 1315
+	},
+	"compaction": {
+		"level": 1,
+		"sources": [
+			"01H86159TCEP10GK5NFK8MX6M2"
+		]
+	},
+	"version": 1
+}

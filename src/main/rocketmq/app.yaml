@@ -1,0 +1,111 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    k8s.kuboard.cn/displayName: apiservice(已验证)
+    k8s.kuboard.cn/workload: apiservice
+  labels:
+    k8s.kuboard.cn/layer: web
+    k8s.kuboard.cn/name: apiservice
+  name: apiservice
+  namespace: golang
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      k8s.kuboard.cn/layer: web
+      k8s.kuboard.cn/name: apiservice
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        kubectl.kubernetes.io/restartedAt: '2023-04-06T21:38:55+08:00'
+      labels:
+        k8s.kuboard.cn/layer: web
+        k8s.kuboard.cn/name: apiservice
+    spec:
+      containers:
+        - image: 'xiaoluotuo1-docker.pkg.coding.net/xiaoluotuo/go/golang_1_18:1.0'
+          imagePullPolicy: IfNotPresent
+          name: apiservice
+          resources: {}
+          securityContext:
+            privileged: true
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+            - mountPath: /data
+              name: volume-27pws
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+        - name: secret
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      serviceAccount: log-go
+      serviceAccountName: log-go
+      terminationGracePeriodSeconds: 30
+      volumes:
+        - hostPath:
+            path: /lnmp/docker/www/apiservice
+            type: ''
+          name: volume-27pws
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    k8s.kuboard.cn/workload: apiservice
+  labels:
+    k8s.kuboard.cn/layer: web
+    k8s.kuboard.cn/name: apiservice
+  name: apiservice
+  namespace: golang
+spec:
+  clusterIP: 10.233.160.209
+  clusterIPs:
+    - 10.233.160.209
+  externalTrafficPolicy: Cluster
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+    - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+    - name: ag4seh
+      nodePort: 31157
+      port: 7002
+      protocol: TCP
+      targetPort: 7002
+    - name: c3amb4
+      nodePort: 30494
+      port: 7001
+      protocol: TCP
+      targetPort: 7001
+    - name: pabmtq
+      nodePort: 30325
+      port: 22
+      protocol: TCP
+      targetPort: 22
+    - name: jscjyp
+      nodePort: 30880
+      port: 8081
+      protocol: TCP
+      targetPort: 8081
+    - name: h6hhy4
+      nodePort: 32455
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    k8s.kuboard.cn/layer: web
+    k8s.kuboard.cn/name: apiservice
+  sessionAffinity: None
+  type: NodePort

@@ -1,0 +1,17 @@
+{
+	"ulid": "01H7XCNV3P1W33V1TW570B37RK",
+	"minTime": 1692115691911,
+	"maxTime": 1692122400000,
+	"stats": {
+		"numSamples": 1699317,
+		"numSeries": 1291,
+		"numChunks": 12910
+	},
+	"compaction": {
+		"level": 1,
+		"sources": [
+			"01H7XCNV3P1W33V1TW570B37RK"
+		]
+	},
+	"version": 1
+}

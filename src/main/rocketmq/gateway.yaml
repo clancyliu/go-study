@@ -1,0 +1,567 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations: {}
+  labels:
+    k8s.kuboard.cn/layer: web
+    k8s.kuboard.cn/name: apisix
+  name: apisix
+  namespace: env
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      k8s.kuboard.cn/layer: web
+      k8s.kuboard.cn/name: apisix
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        kubectl.kubernetes.io/restartedAt: '2023-03-19T12:09:57+08:00'
+      labels:
+        k8s.kuboard.cn/layer: web
+        k8s.kuboard.cn/name: apisix
+    spec:
+      containers:
+        - image: 'apache/apisix:3.2.0-debian'
+          imagePullPolicy: IfNotPresent
+          name: apisix
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+            - mountPath: /usr/local/apisix/conf/config.yaml
+              name: volume-8dpy7
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      volumes:
+        - hostPath:
+            path: /lnmp/docker/env/conf/apisix/config.yaml
+            type: ''
+          name: volume-8dpy7
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations: {}
+  labels:
+    k8s.kuboard.cn/layer: web
+    k8s.kuboard.cn/name: apisix
+  name: apisix
+  namespace: env
+spec:
+  clusterIP: 10.233.197.118
+  clusterIPs:
+    - 10.233.197.118
+  externalTrafficPolicy: Cluster
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+    - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+    - name: skfxk4
+      nodePort: 31205
+      port: 9180
+      protocol: TCP
+      targetPort: 9180
+    - name: jt73xc
+      nodePort: 32304
+      port: 9080
+      protocol: TCP
+      targetPort: 9080
+    - name: fndhr4
+      nodePort: 31224
+      port: 9091
+      protocol: TCP
+      targetPort: 9091
+    - name: 57r3cj
+      nodePort: 31822
+      port: 9443
+      protocol: TCP
+      targetPort: 9443
+    - name: aa3axb
+      nodePort: 31545
+      port: 9092
+      protocol: TCP
+      targetPort: 9092
+  selector:
+    k8s.kuboard.cn/layer: web
+    k8s.kuboard.cn/name: apisix
+  sessionAffinity: None
+  type: NodePort
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations: {}
+  labels:
+    k8s.kuboard.cn/layer: web
+    k8s.kuboard.cn/name: apisix
+  name: apisix
+  namespace: env
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: crm-backend.dev.diasia.com
+      http:
+        paths:
+          - backend:
+              service:
+                name: apisix
+                port:
+                  number: 9080
+            path: /
+            pathType: Prefix
+    - host: www-local.szzz-crm.com
+      http:
+        paths:
+          - backend:
+              service:
+                name: apisix
+                port:
+                  number: 9080
+            path: /
+            pathType: Prefix
+    - host: www-local.szzg-cms.com
+      http:
+        paths:
+          - backend:
+              service:
+                name: apisix
+                port:
+                  number: 9080
+            path: /
+            pathType: Prefix
+    - host: www-local.ctb.com
+      http:
+        paths:
+          - backend:
+              service:
+                name: apisix
+                port:
+                  number: 9080
+            path: /
+            pathType: Prefix
+    - host: cloud.dev.diasia.com
+      http:
+        paths:
+          - backend:
+              service:
+                name: apisix
+                port:
+                  number: 9080
+            path: /
+            pathType: Prefix
+    - host: api-management.dev.diasia.com
+      http:
+        paths:
+          - backend:
+              service:
+                name: apisix
+                port:
+                  number: 9080
+            path: /
+            pathType: Prefix
+    - host: apimarket.diasia.com
+      http:
+        paths:
+          - backend:
+              service:
+                name: apisix
+                port:
+                  number: 9080
+            path: /
+            pathType: Prefix
+    - host: apimanager.diasia.com
+      http:
+        paths:
+          - backend:
+              service:
+                name: apisix
+                port:
+                  number: 9080
+            path: /
+            pathType: Prefix
+    - host: apiadmin.diasia.com
+      http:
+        paths:
+          - backend:
+              service:
+                name: apisix
+                port:
+                  number: 9080
+            path: /
+            pathType: Prefix
+    - host: www-local.asynqmon.com
+      http:
+        paths:
+          - backend:
+              service:
+                name: apisix
+                port:
+                  number: 9080
+            path: /
+            pathType: Prefix
+    - host: www-local.dtm-1-14.com
+      http:
+        paths:
+          - backend:
+              service:
+                name: apisix
+                port:
+                  number: 9080
+            path: /
+            pathType: Prefix
+    - host: www-local.elk-7-17-1.com
+      http:
+        paths:
+          - backend:
+              service:
+                name: apisix
+                port:
+                  number: 9080
+            path: /
+            pathType: Prefix
+    - host: www-local.grafana-latest.com
+      http:
+        paths:
+          - backend:
+              service:
+                name: apisix
+                port:
+                  number: 9080
+            path: /
+            pathType: Prefix
+    - host: www-local.jaeger.com
+      http:
+        paths:
+          - backend:
+              service:
+                name: apisix
+                port:
+                  number: 9080
+            path: /
+            pathType: Prefix
+    - host: www-local.jenkins.com
+      http:
+        paths:
+          - backend:
+              service:
+                name: apisix
+                port:
+                  number: 9080
+            path: /
+            pathType: Prefix
+    - host: www-local.kafka-console-ui.com
+      http:
+        paths:
+          - backend:
+              service:
+                name: apisix
+                port:
+                  number: 9080
+            path: /
+            pathType: Prefix
+    - host: www-local.kafka-manager-np.com
+      http:
+        paths:
+          - backend:
+              service:
+                name: apisix
+                port:
+                  number: 9080
+            path: /
+            pathType: Prefix
+    - host: www-local.kafka-manager-yp.com
+      http:
+        paths:
+          - backend:
+              service:
+                name: apisix
+                port:
+                  number: 9080
+            path: /
+            pathType: Prefix
+    - host: www-local.nacos-2-1-0.com
+      http:
+        paths:
+          - backend:
+              service:
+                name: apisix
+                port:
+                  number: 9080
+            path: /
+            pathType: Prefix
+    - host: www-local.phpmyadmin.com
+      http:
+        paths:
+          - backend:
+              service:
+                name: apisix
+                port:
+                  number: 9080
+            path: /
+            pathType: Prefix
+    - host: www-local.phpredisadmin.com
+      http:
+        paths:
+          - backend:
+              service:
+                name: apisix
+                port:
+                  number: 9080
+            path: /
+            pathType: Prefix
+    - host: www-local.prometheus.com
+      http:
+        paths:
+          - backend:
+              service:
+                name: apisix
+                port:
+                  number: 9080
+            path: /
+            pathType: Prefix
+    - host: www-local.rabbitmq.com
+      http:
+        paths:
+          - backend:
+              service:
+                name: apisix
+                port:
+                  number: 9080
+            path: /
+            pathType: Prefix
+    - host: www-local.zipkin-2.com
+      http:
+        paths:
+          - backend:
+              service:
+                name: apisix
+                port:
+                  number: 9080
+            path: /
+            pathType: Prefix
+    - host: mapi.diasia.com
+      http:
+        paths:
+          - backend:
+              service:
+                name: apisix
+                port:
+                  number: 9080
+            path: /
+            pathType: Prefix
+    - host: www-local.beego.com
+      http:
+        paths:
+          - backend:
+              service:
+                name: apisix
+                port:
+                  number: 9080
+            path: /
+            pathType: Prefix
+    - host: www-local.go-zero-search.com
+      http:
+        paths:
+          - backend:
+              service:
+                name: apisix
+                port:
+                  number: 9080
+            path: /
+            pathType: Prefix
+    - host: www-local.go-zero-user.com
+      http:
+        paths:
+          - backend:
+              service:
+                name: apisix
+                port:
+                  number: 9080
+            path: /
+            pathType: Prefix
+    - host: www-local.go-zero-looklook.com
+      http:
+        paths:
+          - backend:
+              service:
+                name: apisix
+                port:
+                  number: 9080
+            path: /
+            pathType: Prefix
+    - host: www-local.golang.com
+      http:
+        paths:
+          - backend:
+              service:
+                name: apisix
+                port:
+                  number: 9080
+            path: /
+            pathType: Prefix
+    - host: www-local.kratos.com
+      http:
+        paths:
+          - backend:
+              service:
+                name: apisix
+                port:
+                  number: 9080
+            path: /
+            pathType: Prefix
+    - host: www-local.log-go.com
+      http:
+        paths:
+          - backend:
+              service:
+                name: apisix
+                port:
+                  number: 9080
+            path: /
+            pathType: Prefix
+    - host: www-local.szzz-crm-vue.com
+      http:
+        paths:
+          - backend:
+              service:
+                name: apisix
+                port:
+                  number: 9080
+            path: /
+            pathType: Prefix
+    - host: www-local.k8s-php-thinkphp-hello.com
+      http:
+        paths:
+          - backend:
+              service:
+                name: apisix
+                port:
+                  number: 9080
+            path: /
+            pathType: Prefix
+    - host: www-local.micro.com
+      http:
+        paths:
+          - backend:
+              service:
+                name: apisix
+                port:
+                  number: 9080
+            path: /
+            pathType: Prefix
+    - host: www-local.doc-apidog.com
+      http:
+        paths:
+          - backend:
+              service:
+                name: apisix
+                port:
+                  number: 9080
+            path: /
+            pathType: Prefix
+    - host: doc-api.dev.diasia.com
+      http:
+        paths:
+          - backend:
+              service:
+                name: apisix
+                port:
+                  number: 9080
+            path: /
+            pathType: Prefix
+    - host: www-local.openplatform-apidog.com
+      http:
+        paths:
+          - backend:
+              service:
+                name: apisix
+                port:
+                  number: 9080
+            path: /
+            pathType: Prefix
+    - host: www-local.openplatform-admin-apidog.com
+      http:
+        paths:
+          - backend:
+              service:
+                name: apisix
+                port:
+                  number: 9080
+            path: /
+            pathType: Prefix
+    - host: openplatform-management.dev.diasia.com
+      http:
+        paths:
+          - backend:
+              service:
+                name: apisix
+                port:
+                  number: 9080
+            path: /
+            pathType: Prefix
+    - host: www-local.people-digit-apidog.com
+      http:
+        paths:
+          - backend:
+              service:
+                name: apisix
+                port:
+                  number: 9080
+            path: /
+            pathType: Prefix
+    - host: www-local.locust.com
+      http:
+        paths:
+          - backend:
+              service:
+                name: apisix
+                port:
+                  number: 9080
+            path: /
+            pathType: Prefix
+    - host: gateway.diasia.com
+      http:
+        paths:
+          - backend:
+              service:
+                name: apisix
+                port:
+                  number: 9080
+            path: /
+            pathType: Prefix
+    - host: www-local.sentinel-dashboard.com
+      http:
+        paths:
+          - backend:
+              service:
+                name: apisix
+                port:
+                  number: 9080
+            path: /
+            pathType: Prefix
+    - host: www-local.rocketmq-dashboard.com
+      http:
+        paths:
+          - backend:
+              service:
+                name: apisix
+                port:
+                  number: 9080
+            path: /
+            pathType: Prefix
+

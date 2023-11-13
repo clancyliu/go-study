@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>按钮触发后端请求</title>
+</head>
+<body>
+<button id="requestButton">点击发送请求</button>
+<button id="requestButton1">点击发送请求1</button>
+<script>
+    // JavaScript 代码
+    document.getElementById("requestButton").addEventListener("click", function() {
+        // 创建一个新的 XMLHttpRequest 对象
+        var xhr = new XMLHttpRequest();
+
+        // 配置请求
+        xhr.open("GET", "http://localhost:8080/set-session", true);
+
+        // 允许发送 Cookie
+        xhr.withCredentials = true;
+
+        // 定义处理响应的回调函数
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                // 请求成功，处理响应数据
+                var response = xhr.responseText;
+                // alert("后端响应: " + response);
+            } else {
+                // 请求失败，处理错误
+                // alert("请求失败: " + xhr.status);
+            }
+        };
+
+        // 监听错误事件
+        xhr.onerror = function() {
+            // alert("请求发生错误");
+        };
+
+        // 发送请求
+        xhr.send();
+    });
+
+
+    document.getElementById("requestButton1").addEventListener("click", function() {
+        // 创建一个新的 XMLHttpRequest 对象
+        var xhr = new XMLHttpRequest();
+
+        // 配置请求
+        xhr.open("GET", "http://localhost:8080/get-session", true);
+
+        // 允许发送 Cookie
+        xhr.withCredentials = true;
+
+        // 定义处理响应的回调函数
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                // 请求成功，处理响应数据
+                var response = xhr.responseText;
+                // alert("后端响应: " + response);
+            } else {
+                // 请求失败，处理错误
+                // alert("请求失败: " + xhr.status);
+            }
+        };
+
+        // 监听错误事件
+        xhr.onerror = function() {
+            // alert("请求发生错误");
+        };
+
+        // 发送请求
+        xhr.send();
+    });
+</script>
+</body>
+</html>

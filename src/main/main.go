@@ -1,8 +1,11 @@
 package main
 
 import (
-	"fmt"
-	"github.com/gin-gonic/gin"
+	"context"
+	"encoding/json"
+	"errors"
+	"github.com/Shopify/sarama"
+	"log"
 	"time"
 )
 
@@ -14,16 +17,32 @@ type Person struct {
 }
 
 func main() {
-	route := gin.Default()
-	route.GET("/testing", startPage)
-	route.Run(":8085")
-}
-
-func startPage(c *gin.Context) {
-	var person Person
-	if c.ShouldBind(&person) == nil {
-		fmt.Println(fmt.Sprintf("age: %d", *person.Age))
+	consumerGroup, err := sarama.NewConsumerGroup([]string{}, "", sarama.NewConfig())
+	if err != nil {
+		return
 	}
-
-	c.String(200, "Success")
+	if err := consumerGroup.Consume(context.Background(), []string{}, EventHandler{}); err != nil {
+		return
+	}
 }
+
+type EventHandler struct{}
+
+func (e EventHandler) ConsumeClaim(session sarama.ConsumerGroupSession, claim sarama.ConsumerGroupClaim) error {
+	for msg := range claim.Messages() {
+		var data sarama.Message
+		if err := json.Unmarshal(msg.Value, &data); err != nil {
+			return errors.New("failed to unmarshal message err is " + err.Error())
+		}
+		// 操作数据，改用打印
+		log.Print("consumerClaim data is ")
+
+		// 处理消息成功后标记为处理, 然后会自动提交
+		session.MarkMessage(msg, "")
+	}
+	return nil
+}
+
+func (EventHandler) Setup(_ sarama.ConsumerGroupSession) error { return nil }
+
+func (EventHandler) Cleanup(_ sarama.ConsumerGroupSession) error { return nil }

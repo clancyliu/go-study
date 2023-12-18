@@ -1,0 +1,1 @@
+goctl model mysql ddl -s ./sql/test_tab.sql -dir ./model -style go_zero

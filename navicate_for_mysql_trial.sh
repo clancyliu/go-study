@@ -24,7 +24,7 @@ case $version in
        ;;
 esac
 
-echo -n "Reseting trial time..."
+echo -n "Resting trial time..."
 
 regex="([0-9A-Z]{32}) = "
 [[ $(defaults read $file) =~ $regex ]]
